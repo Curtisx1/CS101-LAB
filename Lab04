@@ -1,29 +1,14 @@
-########################################################################
-##
-#CS 101 Lab
+# CS 101 Lab Section 3
 # Program #4
-# Name
-## Email
-##
-## PROBLEM : Describe the problem
-##
-## ALGORITHM : 
-##      1. Write out the algorithm
-## 
-## ERROR HANDLING:
-##      Any Special Error handling to be noted.  Wager not less than 0. etc
-##
-## OTHER COMMENTS:
-##      Any special comments
-##
-########################################################################
+# Curtis Lemke
+# cmlypp@mail.umkc.edu
 
-#import modules needed
+# import modules needed
 import random
 
 
 def play_again() -> bool:
-    ''' Asks the user if they want to play again, returns False if N or NO, and True if Y or YES.  Keeps asking until they respond yes '''
+    # Asks the user if they want to play again
     choice = "x"
     while choice != 'NO' or choice != 'N' or choice != 'YES' or choice != 'Y':
         choice = input('Do you want to play again:\n')
@@ -37,16 +22,17 @@ def play_again() -> bool:
             continue
 
 
-def get_wager(bank : int) -> int:
-    ''' Asks the user for a wager chip amount.  Continues to ask if they result is <= 0 or greater than the amount they have '''
+def get_wager(banks: int) -> int:
+    # Asks the user for a wager amount. Continues to ask if they result is <= 0 or greater than the amount they have
     amount = int(input('Enter the amount you want to wager:\n'))
-    while amount <= 0 or amount > bank:
+    while amount <= 0 or amount > banks:
         if amount <= 0:
             print('The wager cant be less than or equal to 0. Please try again.')
-        if amount > bank:
+        if amount > banks:
             print('The wager cant be greater than the amount in the bank. Please try again.')
         amount = int(input('Enter the amount you want to wager:\n'))
     return amount
+
 
 def get_slot_results() -> tuple:
     a = random.randint(1, 10)
@@ -57,7 +43,7 @@ def get_slot_results() -> tuple:
 
 
 def get_matches(reela, reelb, reelc) -> int:
-    ''' Returns 3 for all 3 match, 2 for 2 alike, and 0 for none alike. '''
+    # Returns 3 for all 3 match, 2 for 2 alike, and 0 for none alike.
     if reela == reelb and reela == reelc:
         return 3
     if reela == reelb and reela != reelc:
@@ -71,7 +57,7 @@ def get_matches(reela, reelb, reelc) -> int:
 
 
 def get_bank() -> int:
-    ''' Returns how many chips the user wants to play with.  Loops until a value greater than 0 and less than 101 '''
+    # Returns how many chips the user wants to play with.  Loops until a value greater than 0 and less than 101
     amount = 0
     while amount <= 0 or amount > 100:
         amount = int(input('How many chips do you want to play with?\n'))
@@ -84,14 +70,15 @@ def get_bank() -> int:
     return amount
 
 
-def get_payout(wager, matches):
-    ''' Returns how much the payout is.. 10 times the wager if 3 matched, 3 times the wager if 2 match, and negative wager if 0 match '''
-    if matches == 0:
-        profit = wager * -1
-    elif matches == 2:
-        profit = wager * 3 - wager
-    elif matches == 3:
-        profit = wager * 10 - wager
+def get_payout(bet, match):
+    # Returns payout. 10 times the wager if 3 matched, 3 times the wager if 2 match, and negative wager if 0 match
+
+    if match == 0:
+        profit = bet * -1
+    elif match == 2:
+        profit = bet * 3 - bet
+    elif match == 3:
+        profit = bet * 10 - bet
     return profit
 
 
@@ -103,7 +90,7 @@ if __name__ == "__main__":
         bank = get_bank()
 
         while bank > 0:  # Replace with condition for if they still have money.
-            
+
             wager = get_wager(bank)
 
             reel1, reel2, reel3 = get_slot_results()
@@ -117,7 +104,7 @@ if __name__ == "__main__":
             print("You won/lost", payout)
             print("Current bank", bank)
             print()
-           
-        print("You lost all", 0, "in", 0, "spins")
-        print("The most chips you had was", 0)
+
+        print(f'You lost all, 0, "in", 0, spins')
+        print(f'The most chips you had was, 0')
         playing = play_again()
