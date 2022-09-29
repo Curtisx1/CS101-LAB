@@ -12,7 +12,7 @@ import string
 
 
 def get_school(idnum: str) -> str:
-
+    # Returns the school according to the id number position 5
     if idnum[5] == '1':
         return 'School of Computing and Engineering SCE'
     elif idnum[5] == '2':
@@ -24,6 +24,7 @@ def get_school(idnum: str) -> str:
 
 
 def get_grade(idnum: str) -> str:
+    # Returns the grade of the student depending on the position of id number 6
     if idnum[6] == '1':
         return "Freshman"
     elif idnum[6] == '2':
@@ -37,10 +38,12 @@ def get_grade(idnum: str) -> str:
 
 
 def character_value(char: str) -> int:
+    # Returns all caps
     return string.ascii_uppercase.index(char)
 
 
 def get_check_digit(idnum: str) -> int:
+    # Checks the digits in the first 5 positions
     total = 0
     for i in range(0, 5):
         total += ((i + 1) * character_value(idnum[i]))
@@ -50,25 +53,27 @@ def get_check_digit(idnum: str) -> int:
 
 
 def verify_check_digit(idnum: str) -> tuple:
-
+    # Checks the ID card number provided. Returns false and an error message
     if len(idnum) != 10:
         return False, "The length of the number given must be 10"
     elif not idnum[0:5].isalpha():
         for i in range(0, 5):
             if not idnum[i].isalpha():
-                return False, 'The first 5 characters must be A-Z, the invalid character is at {} is {}'.format(idnum[i], i)
+                return False, "The first 5 characters must be A-Z, the invalid character is at {} is {}".format(idnum[i], i)
     elif not idnum[7:10].isdigit():
         for i in range(7, 10):
             if not idnum[i].isdigit():
-                return False, 'The last three characters must be 0-9, the invalid character is at {} is {}'.format(idnum[i], i)
+                return False, "The last three characters must be 0-9, the invalid character is at {} is {}".format(idnum[i], i)
     elif idnum[5] != '1' and idnum[5] != '2' and idnum[5] != '3':
-        return False, 'The sixth character must be 1 2 or 3'
+        return False, "The sixth character must be 1 2 or 3"
     elif idnum[6] != '1' and idnum[6] != '2' and idnum[6] != '3' and idnum[6] != '4':
-        return False, 'The seventh character must be 1 2 3 or 4'
+        return False, "The seventh character must be 1 2 3 or 4"
     elif int(idnum[9]) != get_check_digit(idnum):
-        return False, 'Check Digit {} does not match calculated value {}'.format(idnum[9], get_check_digit(idnum))
+        return False, "Check Digit {} does not match calculated value {}".format(idnum[9], get_check_digit(idnum))
     else:
         return True, ''
+
+# Start of program
 
 
 if __name__ == "__main__":
@@ -89,5 +94,4 @@ if __name__ == "__main__":
         else:
             print("Library card is invalid.")
             print(error)
-
 
