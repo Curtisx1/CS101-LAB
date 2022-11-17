@@ -1,108 +1,121 @@
 # Name: Curtis Lemke
 # Class: CS101 LAB Section 3
-# Assignment: Lab Week 7
-# Date: 10/12/2022
-# Created date: 10/12/2022
+# Assignment: Lab Week 8
+# Date: 10/19/2022
+# Created date: 10/19/2022
 
 
 # Imported Libraries
-
+import math
 
 # Function List
 
 
-def minimum_mpg():
-    # Returns the minimum gas mileage required
-    x = True
-    while x:
-        try:
-            while x:
-                mpg = int(input("Enter the minimum mpg ==> "))
-                if mpg <= 0:
-                    print("Fuel economy given must be greater than 0.")
-                elif mpg > 100:
-                    print("Fuel economy must be less than 100.")
-                else:
-                    x = False
-                    return mpg
-        except ValueError:
-            print("You must enter a number for the fuel economy.")
+def mean(x):
+    if len(x) == 0:
+        return 0
+    else:
+        total = 0.0
+    for i in x:
+        total += i
+    return total/len(x)
 
 
-def open_file():
-    # Returns the chosen user file-repeats until valid file is selected
-    x = True
-    while x:
-        try:
-            file = input("Enter the name of the input vehicle file ==> ")
-            user_file1 = open(file)
-            x = False
-            return user_file1
-        except FileNotFoundError:
-            print('Unable to open chosen file. Please try again.'.format(file))
+def std(_mean, x):
+    square_root = 0.0
+    for i in x:
+        square_root += (i - _mean)**2
+    return (square_root/len(x))**0.5
 
 
-def file_output():
-    # Returns the name of the output file
-    x = True
-    while x:
-        try:
-            file = input("Enter the name of the file to output to ==> ")
-            user_file1 = open(file, 'a')
-            x = False
-            return user_file1
-        except IOError:
-            print('There is an IO Error {}.'.format(file))
+def menu_tests(test, assignment):
+    number_tests = len(test)
+    num_assign = len(assignment)
+    weighted = 0.0
+    print("Type # min max avg std")
+    print("====================================================== ")
+    if number_tests == 0:
+        test_min = "n/a"
+        test_max = "n/a"
+        test_avg = "n/a"
+        test_std = "n/a"
+        print("Tests 0 n/a n/a n/a n/a")
+    else:
+        test_min = min(test)
+        test_max = max(test)
+        test_avg = mean(test)
+        test_std = std(test_avg, test)
+        weighted += test_avg*0.6
+        print("Tests %d %.2f %.2f %.2f %.2f"%(number_tests, test_min, test_max, test_avg, test_std))
+
+    if num_assign == 0:
+        assignment_min = "n/a"
+        assignment_max = "n/a"
+        assignment_avg = "n/a"
+        assignment_std = "n/a"
+        print("Programs 0 n/a n/a n/a n/a")
+    else:
+        assignment_min = min(assignment)
+        assignment_max = max(assignment)
+        assignment_avg = mean(assignment)
+        assignment_std = std(assignment_avg, assignment)
+        weighted += assignment_avg*0.4
+        print("Programs %d %.2f %.2f %.2f %.2f"%(num_assign, assignment_min, assignment_max, assignment_avg, assignment_std))
+        print("The weighted scores is %.2f", weighted)
 
 
-def user_list(my_file):
-    # Creates a list with \t seperator. Outputs to user file
-    file = my_file.readlines()
-    new_file = []
-    for i in range(len(file)):
-        new_file.append(file[i].split('\t'))
-    return new_file
-
-
-def output_file(lst_1, mpg_1, file):
-    # Returns the formatted file
-    for i in range(1, len(lst_1)):
-        try:
-            combined = float(lst_1[i][7])
-            if combined >= mpg_1:
-                file.write('{:<5}{:<20}{:<40}{:>10.3f}.\n'.format(lst_1[i][0], lst_1[i][1], lst_1[i][2], combined))
-        except ValueError:
-            print('Could not convert value {} for vehicle {} {} {}.'.format(lst_1[i][7], lst_1[i][0], lst_1[i][1], lst_1[i][2]))
-
-
-def repeat():
-    # Asks the user if they want to perform another search
-    choice = "x"
-    while choice != 'NO' or choice != 'N' or choice != 'YES' or choice != 'Y':
-        choice = input('Perform another search? ==> ')
-        choice = choice.upper()
-        if choice == 'YES' or choice == 'Y':
-            return True
-        elif choice == 'NO' or choice == 'N':
-            return False
+def main_program():
+    test_scores = []
+    assignment_scores = []
+    while True:
+        print(" Grade Menu")
+        print("1 - Add Test")
+        print("2 - Remove Test")
+        print("3 - Clear Tests")
+        print("4 - Add Assignment")
+        print("5 - Remove Assignment")
+        print("6 - Clear Assignments")
+        print("D - Display Scores")
+        print("Q - Quit")
+        user_choice = (input("==> "))
+        if user_choice == '1':
+            test_temp = float(input("Enter the new Test score 0-100 ==> "))
+            while test_temp < 0:
+                test_temp = float(input("Enter the new Test score 0-100 ==> "))
+                test_scores.append(test_temp)
+        elif user_choice == '2':
+            test_remove = float(input("Enter the Test to remove 0-100 ==> "))
+            removed_element = False
+            for i in test_scores:
+                if i == test_remove:
+                    test_scores.remove(test_remove)
+                    removed_element = True
+                if not removed_element:
+                    print("Could not find that score to remove")
+        elif user_choice == '3':
+                test_scores.clear()
+        elif user_choice == '4':
+            test_temp = float(input("Enter the new Assignment score 0-100 ==> "))
+            while test_temp < 0:
+                test_temp = float(input("Enter the new Assignment score 0-100 ==> "))
+                assignment_scores.append(test_temp)
+        elif user_choice == '5':
+            test_temp = float(input("Enter the Assignment to remove 0-100 ==> "))
+            removed_element = False
+            for i in assignment_scores:
+                if i == test_temp:
+                    assignment_scores.remove(test_temp)
+                    removed_element = True
+                if not removed_element:
+                    print("Could not find that score to remove")
+        elif user_choice == '6':
+            assignment_scores.clear()
+        elif user_choice == 'D' or user_choice == 'd':
+            menu_tests(test_scores, assignment_scores)
+        elif user_choice == 'Q' or user_choice == 'q':
+            break
         else:
-            print('You must enter Y/YES/N/NO. Please try again.')
-            continue
+            print("Please choose correct option.")
 
-
-if __name__ == "__main__":
-    print("{:^60}".format("Fuel Economy Search"))
-    print("=" * 60)
-    x = True
-    while x:
-        mpg = minimum_mpg()
-        infile = open_file()
-        user_file = user_list(infile)
-        outfile = file_output()
-        output_file(user_file, mpg, outfile)
-        infile.close()
-        outfile.close()
-        x = repeat()
-
-
+main()
 
