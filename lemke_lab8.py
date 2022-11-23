@@ -116,7 +116,7 @@ def main_program():
             assignment_scores.clear()
         elif user_choice == 7:
             grade_menu(test_scores, assignment_scores)
-        elif user_choice == 8
+        elif user_choice == 8:
             break
         else:
             print("Please choose correct option.")
