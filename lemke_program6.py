@@ -11,6 +11,7 @@
 # Function List
 
 # Classes
+
 class Store:
     """Handles location name and items for sale. Base class for Cart"""
     def __init__(self, name, location):
@@ -37,7 +38,8 @@ class Store:
         print("Placed order from: " + self.name + "\nAt address: " + self.location)
 
 # Cart Class
-class Cart (Store):
+
+class Cart(Store):
     """Handles the shopping cart. Inherits from the "Store" class. Displays user shopping cart and totals."""
     def __init__(self, store_name, store_address):
         self.receipt = 0
