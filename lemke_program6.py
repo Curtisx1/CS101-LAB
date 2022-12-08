@@ -1,6 +1,6 @@
 # Name: Curtis Lemke
-# Class: CS101 LAB Section 3
-# Assignment: Lab Week 8
+# Class: CS101 Section 3
+# Assignment: Program 6
 # Due Date: 12/9/2022
 # Created date: 12/7/2022
 
