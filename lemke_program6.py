@@ -11,124 +11,121 @@
 # Function List
 
 # Classes
-class ItemToPurchase:
-    def __init__(self):
-        self.item_name = "none"
-        self.item_price = 0
-        self.item_quantity = 0
-        self.item_description = "none"
+class Store:
+    """Handles location name and items for sale. Base class for Cart"""
+    def __init__(self, name, location):
+        self.name = name
+        self.location = location
+        self.products = {"Milk" : 2.5, "Bread" : 1.98, "Egg" : 0.7, "Flour" : 1.18, "Oil" : 4, "Cheese" : 2.68}
 
-    def print_item_description(self):
-        print(self.item_name + ", " + self.item_description)
+    def setName(self, name):
+         self.name = name 
 
-    def print_item_cost(self):
-        print(self.item_name + " " + str(self.item_quantity) + " @ $" + str(self.item_price) + " = $" + str( self.item_price * self.item_quantity ));
+    def setLocation(self, location):
+        self.location = location
 
+    def addProduct(self, product, price):
+        self.products[product] = price
 
-class ShoppingCart:
-    def __init__(self, cn="none", cd="January 1, 2016"):
-        self.customerName = cn
-        self.current_date = cd
-        self.items = []
+    def displayProducts(self):
+        print("Available Products:")
+        print("=" * 19)
+        for i, j in self.products.items():
+            print("{:<10}: ${:.2f}".format(i, j))
 
-    def add_item(self, item):
-        self.items.append(item)
+    def displayData(self):
+        print("Placed order from: " + self.name + "\nAt address: " + self.location)
 
-    def remove_item(self, itemName):
-        foundIdx = -1
-        for i in range(len(self.items)):
-            if self.items[i].item_name == itemName:
-                foundIdx = i
-                break
-            if foundIdx == -1:
-                print("Item not found in the cart. Nothing removed.")
+# Cart Class
+class Cart (Store):
+    """Handles the shopping cart. Inherits from the "Store" class. Displays user shopping cart and totals."""
+    def __init__(self, store_name, store_address):
+        self.receipt = 0
+        self.cart = {}
+        Store.__init__(self, store_name, store_address)
+
+    def add_item(self, item, quantity):
+        if(item in self.products):
+            self.cart[item] = quantity 
+            self.receipt += self.products[item] * quantity
+
+        else:
+            print("Item not present in our store.\n")
+
+    def remove_item(self, item, quantity):
+        if(len(self.cart) == 0):
+            print("Your cart is empty. Please continue shopping.\n")
+            return
+
+        if(item in self.cart):
+            if(quantity == self.cart[item]):
+                self.cart.pop(item)
+                self.receipt -= self.products[item] * quantity
+
+            elif(quantity < self.cart[item]):
+                self.cart[item] -= quantity
+                self.receipt -= self.products[item] * quantity
+
             else:
-                del self.items[foundIdx]
-
-    def modify_item(self, item):
-        foundIdx = -1
-        for i in range(len(self.items)):
-            if self.items[i].item_name == item.item_name:
-                foundIdx = i
-                break
-
-        if foundIdx == -1:
-            print("Item not found in the cart. Nothing modified.")
+                print("There are not enough items in your cart.\n")
+                print("Please try again.\n")
+            
         else:
-            self.items[foundIdx].item_quantity = item.item_quantity
+            print("Item not present in the cart.\n")
 
-    def get_num_items_in_cart(self):
-        return len(self.items)
+    def displayData(self):
+        super().displayData()
+        print("Order in cart is:",len(self.cart))
+        for i,j in self.cart.items():
+            print(i,"With quantity:",j)
+            print("Shopping cart total is $",self.receipt)
 
-    def get_cost_of_cart(self):
-        totalCost = 0
-        for item in self.items:
-            totalCost += (item.item_quantity * item.item_price)
-            return totalCost
-
-    def print_total(self):
-        if self.get_num_items_in_cart() == 0:
-            print("SHOPPING CART IS EMPTY")
-        else:
-            print(self.customerName + "'s Shopping Cart - " + self.current_date)
-            print("Number of Items: ", self.get_num_items_in_cart(),"\n")
-        for item in self.items:
-            item.print_item_cost()
-            print("\n\nTotal: $" + str(self.get_cost_of_cart()))
-
-    def print_descriptions(self):
-        if self.get_num_items_in_cart() == 0:
-            print("SHOPPING CART IS EMPTY")
-        else:
-            print(self.customerName + "'s Shopping Cart - " + self.current_date)
-            print("\nItem Descriptions")
-        for item in self.items:
-            item.print_item_description()
-
-        def print_menu(pObj):
-            while(True):
-                print("\nMENU\na - Add item to cart\nr - Remove item from cart\nc - Change item quantity\ni - Output item's description\no - Output shopping cart\nq - Quit\n\nChoose an option:")
-                ch = input()
-                if ch.lower() == "q":
-                    break
-
-                elif ch.lower() == "a":
-                    print("ADD ITEM TO CART")
-                    item = ItemToPurchase()
-                    item.item_name = input('Enter the item name:\n')
-                    item.item_description = input('Enter the item description:\n')
-                    item.item_price = int(input('Enter the item price:\n'))
-                    item.item_quantity = int(input('Enter the item quantity:\n'))
-                    pObj.add_item(item)
-
-                elif ch.lower() == "r":
-                    print("REMOVE ITEM FROM CART")
-                    itemName = input('Enter the item name to remove:\n')
-                    pObj.remove_item(itemName)
-
-                elif ch.lower() == "c":
-                    print("CHANGE ITEM QUANTITY")
-                    item = ItemToPurchase()
-                    item.item_name = input('Enter the item name:\n')
-                    item.item_quantity = int(input('Enter the new quantity:\n'))
-                    pObj.modify_item(item)
-
-                elif ch.lower() == "o":
-                    print("OUTPUT SHOPPING CART")
-                    pObj.print_total()
-
-                elif ch.lower() == "i":
-                    print("OUTPUT ITEM'S DESCRIPTIONS")
-                    pObj.print_descriptions()
-
-                def main(self):
-                    self.cName = input("Enter customer's name:\n")
-                    self.cDate = input("Enter today's date:\n")
-                    print("\nCustomer name:", self.cName)
-                    print("Today's date:", self.cDate)
-                    pObj = ShoppingCart(self.cName, self.cDate)
-                    self.print_menu(pObj)
-
+# Main function 
 
 if __name__ == '__main__':
-    ShoppingCart.main(ShoppingCart)
+    store_name = input("Good morning! Which store would you like to use today?\n")
+    store_address = input("Which location do you want to use?\n")
+    store = Store(store_name, store_address)
+    cart = Cart(store_name, store_address)
+    store.displayProducts()
+    product = input("Enter the name of a product to add:\n").title()
+    while(True):
+        try:
+            quantity = int(input("Enter item quantity:\n"))
+            break
+
+        except:
+            print("Please enter an integer for quantity.\n")
+
+    cart.add_item(product, quantity)
+    cart.displayData()
+    while(True):
+        choice = input("Do you want to remove an item? (Yes/No)\n").lower()
+        if(choice == "yes"):
+            product = input("Enter the name of a product to add:\n").title()
+            while(True):
+                try:
+                    quantity = int(input("Enter item quantity:\n"))
+                    break
+                except:
+                    print("Please enter an integer for quantity.\n")
+            cart.remove_item(product, quantity)
+            cart.displayData()
+        else:
+            choice2 = input("Do you want to add another product? (Yes/No):\n").lower()
+            if(choice2 == "yes"):
+                store.displayProducts()
+                product = input("Enter the name of a product to add:\n").title()
+                while(True):
+                    try:
+                        quantity = int(input("Enter item quantity:\n"))
+                        break
+                    except:
+                        print("Please enter an integer for quantity.\n")
+                cart.add_item(product, quantity)
+                cart.displayData()
+            else:
+                print("Your Order details are as follows:\n")
+                cart.displayData()
+                print("Thank you for shopping with us! Have a nice day.")
+                break
